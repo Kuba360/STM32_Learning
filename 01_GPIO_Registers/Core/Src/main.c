@@ -65,9 +65,11 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	RCC->AHBENR |= RCC_AHBENR_GPIOAEN; //enable clock at A port
+	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN; //enable clock at A port
 	GPIOA->MODER &= ~(3U<<10); //reset bits for PA5
-	GPIOA->MODER |= (1U<<10);  // set pin PA5 as output
+	GPIOA->MODER |= (1U<<10);  // set pin PA5 as output - LD2
+
+	GPIOC->MODER &= ~(3U<<(13*2)); // set pin PC13 to input - B1
 	GPIOA->BSRR = (1U<<5); // set bit for PA5
   /* USER CODE END 1 */
 
@@ -98,6 +100,11 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
+	if(((GPIOC->IDR) & (1U<<13))==0){
+		GPIOA->BSRR=(1U<<5);
+	}else{
+		GPIOA->BSRR=(1U<<(5+16));
+	}
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
